@@ -3,10 +3,18 @@ from django.http import HttpResponse
 from .models import *
 
 def home(request):
-    order = Order.objects.all()
-    customer = Customer.objects.all()
+    orders = Order.objects.all()
+    customers = Customer.objects.all()
 
-    context = {'orders' : order, 'customers': customer}
+    total_customers = customers.count()
+
+    total_orders = orders.count()
+    delivered = orders.filter(status='Delivered').count()
+    pending = orders.filter(status='Pending').count()
+
+
+    context = {'orders' : orders, 'customers': customers, 'total_customers': total_customers,
+     'total_orders': total_orders, 'delivered': delivered, 'pending': pending}
 
     return render(request, 'accounts/dashboard.html', context)
     
@@ -16,4 +24,4 @@ def products(request):
     return render(request, 'accounts/products.html', {'products': products})
 
 def customer(request):
-    return render(request, 'accounts/customer.html')  
+    return render(request, 'accounts/customer.html')     
