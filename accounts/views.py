@@ -1,4 +1,4 @@
-from django.shortcuts import render
+rom django.shortcuts import render
 from django.http import HttpResponse
 from .models import *
 
@@ -23,5 +23,6 @@ def products(request):
 
     return render(request, 'accounts/products.html', {'products': products})
 
-def customer(request):
+def customer(request, pk_test):
+    customer = Customer.objects.get(id=pk_test)
     return render(request, 'accounts/customer.html')     
