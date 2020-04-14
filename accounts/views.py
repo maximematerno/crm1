@@ -51,9 +51,11 @@ def createOrder(request):
     return render(request, 'accounts/order_form.html', context)
 
 def updateOrder(request, pk):
-    
-    form = OrderForm()
+
+
+    order = Order.objects.get(id=pk)
+    form = OrderForm(instance=order)
     
     context = {'form': form}
 
-    return render(request, 'accounts/order_form.html', context)        
+    return render(request, 'accounts/order_form.html', context)      
