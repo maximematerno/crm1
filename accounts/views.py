@@ -57,7 +57,7 @@ def updateOrder(request,pk):
     form = OrderForm(instance=order)
 
     if request.method == 'POST':
-        #print('Printing POST:', request.POST)
+        
         form = OrderForm(request.POST, instance=order)
         if form.is_valid():
             form.save()
