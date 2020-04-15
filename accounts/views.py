@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.forms import inlineformset_factory
 from .models import *
 from .forms import OrderForm
 
@@ -34,19 +35,24 @@ def customer(request, pk_test):
     return render(request, 'accounts/customer.html', context) 
 
 
-def createOrder(request):
+def createOrder(request,pk):
+    OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status'), extra=10)
+    customer = Customer.objects.get(id=pk)
+    formSet = OrderFormSet(queryset= Order.objects.none(),instance=customer)
 
-    form = OrderForm()
+    #form = OrderForm(initial={'customer': customer})
+
     if request.method == 'POST':
         #print('Printing POST:', request.POST)
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            form.save()
+        formSet = OrderFormSet(request.POST,instance=customer)
+        # form = OrderForm(request.POST)
+        if formSet.is_valid():
+            formSet.save()
             return redirect('/')
 
 
 
-    context = {'form': form}
+    context = {'formSet': formSet}
 
     return render(request, 'accounts/order_form.html', context)
 
@@ -75,4 +81,4 @@ def deleteOrder(request, pk):
         return redirect('/')
 
     context = {'item': order}    
-    return render(request, 'accounts/delete.html', context)  
+    return render(request, 'accounts/delete.html', context)       
