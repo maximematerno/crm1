@@ -1,4 +1,17 @@
 {% load static %}
+
+
+<style>
+  .hello-msg{
+    font-size: 18px;
+    color: #fff;
+    margin-right: 20px;
+  }
+</style>
+
+
+
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <img src="{% static 'images/lion_kingLogo.png' %}">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,11 +28,14 @@
         <img src="{% static 'images/darthVaderLogo.png' %}">
         <img src="{% static 'images/HomerSimpsonLogo.png' %}">
         <img src="{% static 'images/pumbaLogo.png' %}">
-        <img src="{% static 'images/hulkLogo.png' %}">
         <img src="{% static 'images/genieLogo.png' %}">
         
     
     
       </ul>
     </div>
+
+    <span class="hello-msg">Hello, {{request.user}}</span>
+    <span><a class="hello-msg" href="{% url 'logout' %}">Logout</a></span>
+
   </nav>
