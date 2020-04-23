@@ -11,7 +11,7 @@ from django.contrib.auth.models import Group
 
 
 from .models import *
-from .forms import OrderForm, CreateUserForm
+from .forms import OrderForm, CreateUserForm, CustomerForm
 from .filters import OrderFilter
 from .decorators import unauthenticated_user, allowed_users, admin_only
 
@@ -80,6 +80,7 @@ def home(request):
 
     return render(request, 'accounts/dashboard.html', context)
 
+
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['customer']) 
 def userPage(request):
@@ -94,7 +95,25 @@ def userPage(request):
 				'delivered': delivered,
 				'pending': pending}
 
-    return render(request, 'accounts/user.html', context)    
+    return render(request, 'accounts/user.html', context) 
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['customer']) 
+def accountSetting(request):
+    customer = request.user.customer
+    form = CustomerForm(instance=customer)
+
+    if request.method == 'POST':
+        form = CustomerForm(request.POST, request.FILES, instance=customer)
+        if form.is_valid():
+            form.save()
+
+
+    context= {'form':form}
+    return render(request, 'accounts/account_settings.html', context)
+      
+
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])    
@@ -103,6 +122,7 @@ def products(request):
     products = Product.objects.all()
 
     return render(request, 'accounts/products.html', {'products': products})
+
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
@@ -117,6 +137,7 @@ def customer(request, pk_test):
 
     context = {'customer': customer, 'orders': orders, 'order_count': order_count,'myFilter':myFilter }
     return render(request, 'accounts/customer.html', context) 
+
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
