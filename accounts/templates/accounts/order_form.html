@@ -9,13 +9,23 @@
         <div class="col-md-6">
             <div class="card card-body">
                  <form action= "" method="POST">
-                     {% csrf_token %}
-                     {{ formSet.management_form }}
-                     {% for form in formSet %}
-                        {{form}}
-                        <hr>
+                    {% csrf_token %}
 
-                     {% endfor %}
+                    {% if formset.management_form %}
+        
+                        {{ formset.management_form }}
+        
+                        {% for form in formset %}
+                            {{form}}
+                            <br>
+                        {% endfor %}
+        
+                    {% else %}
+        
+                        {{form}}
+                            <br>
+        
+                    {% endif %}
                             
                      <input type="submit" name="Submit">
                  </form>
